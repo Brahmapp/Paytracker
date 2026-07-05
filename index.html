@@ -30,6 +30,7 @@
     --r:22px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  [hidden]{display:none!important}
   html,body{height:100%}
   body{
     font-family:"Noto Sans JP",system-ui,sans-serif;
@@ -46,38 +47,6 @@
   .app{width:100%;max-width:440px;position:relative}
 
   /* ── notification toast ── */
-  .toast-layer{position:fixed;top:14px;left:0;right:0;display:flex;justify-content:center;z-index:50;pointer-events:none;padding:0 14px}
-  .toast{
-    width:100%;max-width:412px;
-    background:rgba(28,26,40,.72);
-    backdrop-filter:blur(24px) saturate(150%);
-    -webkit-backdrop-filter:blur(24px) saturate(150%);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:13px 15px;
-    display:flex;gap:12px;align-items:center;
-    box-shadow:0 18px 50px -12px rgba(0,0,0,.6);
-    transform:translateY(-160%);
-    opacity:0;
-    transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .35s;
-  }
-  .toast.show{transform:translateY(0);opacity:1}
-  .toast.warn{border-color:rgba(255,107,107,.4)}
-  .toast .ic{
-    width:38px;height:38px;border-radius:11px;flex:0 0 auto;
-    display:grid;place-items:center;
-    background:linear-gradient(150deg,var(--gold),#c98e2e);
-    box-shadow:0 4px 14px rgba(232,176,75,.35);
-  }
-  .toast.warn .ic{background:linear-gradient(150deg,#ff8a8a,#d94b4b);box-shadow:0 4px 14px rgba(255,107,107,.35)}
-  .toast .ic svg{width:20px;height:20px}
-  .toast .body{min-width:0;flex:1}
-  .toast .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-  .toast .ttl{font-size:11px;letter-spacing:.04em;color:var(--ink-dim);font-weight:500}
-  .toast .now{font-size:10px;color:var(--ink-faint)}
-  .toast .msg{font-size:14.5px;font-weight:500;line-height:1.45;margin-top:2px}
-  .toast .msg b{font-family:"Outfit";font-weight:700;font-variant-numeric:tabular-nums}
-
   /* ── header ── */
   .top{display:flex;justify-content:space-between;align-items:center;padding:6px 4px 2px}
   .brand{display:flex;align-items:center;gap:9px}
@@ -114,22 +83,7 @@
   }
   .past-banner button:active{background:rgba(126,184,224,.3)}
 
-  /* 記録プロンプト */
-  .rec-prompt{display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:12px 14px;
-    background:linear-gradient(135deg,rgba(232,176,75,.16),rgba(232,176,75,.07));
-    border:1px solid rgba(232,176,75,.42);border-radius:16px;
-    animation:rpIn .45s cubic-bezier(.16,1,.3,1);}
-  @keyframes rpIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-  .rec-prompt .rp-ic{width:40px;height:40px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;font-size:20px;background:rgba(232,176,75,.18)}
-  .rec-prompt .rp-body{flex:1;min-width:0}
-  .rec-prompt .rp-ttl{font-size:14.5px;font-weight:700;color:var(--ink)}
-  .rec-prompt .rp-sub{font-size:11.5px;color:var(--ink-dim);margin-top:1px}
-  .rec-prompt .rp-go{flex:0 0 auto;border:none;border-radius:11px;padding:10px 14px;cursor:pointer;
-    font-family:"Noto Sans JP";font-weight:700;font-size:13px;color:#1a1206;
-    background:linear-gradient(135deg,var(--gold-soft),var(--gold));}
-  .rec-prompt .rp-go:active{filter:brightness(1.06)}
-  .rec-prompt .rp-x{flex:0 0 auto;width:28px;height:28px;border:none;background:none;color:var(--ink-faint);font-size:13px;cursor:pointer;border-radius:8px}
-  .rec-prompt .rp-x:active{background:rgba(255,255,255,.06)}
+  /* 記録プロンプト削除済み */
 
   /* トグルスイッチ */
   .toggle-row{display:flex;align-items:center;gap:12px;justify-content:space-between}
@@ -176,6 +130,11 @@
     width:100%;letter-spacing:.01em;
   }
   .amt-row input::placeholder{color:var(--ink-faint);font-weight:500}
+  .amt-rec{flex:0 0 auto;border:none;border-radius:12px;cursor:pointer;padding:11px 16px;
+    font-family:"Noto Sans JP";font-weight:700;font-size:15px;color:#1a1206;
+    background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+    box-shadow:0 6px 16px -6px rgba(232,176,75,.6);transition:transform .12s,filter .12s;}
+  .amt-rec:active{transform:scale(.96);filter:brightness(1.06)}
   .amt-row.shake{animation:shake .4s}
   @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 
@@ -355,20 +314,6 @@
 <canvas id="fx"></canvas>
 <div class="app">
 
-  <div class="toast-layer">
-    <div class="toast" id="toast">
-      <div class="ic" id="toastIc">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1206" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 003.4 0"/>
-        </svg>
-      </div>
-      <div class="body">
-        <div class="head"><span class="ttl">いますぐ家計</span><span class="now" id="toastNow"></span></div>
-        <div class="msg" id="toastMsg"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="top">
     <div class="brand"><div class="dot"></div><span>いますぐ家計</span></div>
     <button class="gear" id="openSettings" aria-label="設定">
@@ -395,20 +340,11 @@
     <button id="backToNow">今月に戻る</button>
   </div>
 
-  <div class="rec-prompt" id="recPrompt" hidden>
-    <div class="rp-ic">💳</div>
-    <div class="rp-body">
-      <div class="rp-ttl">クレカ使いましたか？</div>
-      <div class="rp-sub">金額を入れてサッと記録しましょう</div>
-    </div>
-    <button class="rp-go" id="rpGo">入力する</button>
-    <button class="rp-x" id="rpX" aria-label="閉じる">✕</button>
-  </div>
-
   <div class="card" id="entryCard">
     <div class="amt-row" id="amtRow">
       <span class="y">¥</span>
       <input id="amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+      <button class="amt-rec" id="amtRecBtn">記録</button>
     </div>
     <div class="chips" id="chips"></div>
     <input class="memo" id="memo" type="text" placeholder="店名・メモ（任意）" autocomplete="off">
@@ -458,10 +394,6 @@
       <h4>🔔 記録忘れを防ぐ（設定不要）</h4>
       <p style="margin-bottom:12px">ショートカットなどの準備は一切いりません。オンにするだけです。</p>
       <div class="toggle-row">
-        <div class="tg-text"><div class="tg-ttl">戻ってきたら記録をうながす</div><div class="tg-sub">アプリを開いた時に「記録する？」を表示します（30分以上あいたとき）</div></div>
-        <button class="tg" id="remindToggle" role="switch" aria-checked="false"><span class="tg-knob"></span></button>
-      </div>
-      <div class="toggle-row" style="margin-top:14px">
         <div class="tg-text"><div class="tg-ttl">アプリを開かなくても未記録日数を表示</div><div class="tg-sub">ホーム画面のアイコンに「未記録◯日」のバッジを出します（通知の許可が1回必要）</div></div>
         <button class="tg" id="badgeToggle" role="switch" aria-checked="false"><span class="tg-knob"></span></button>
       </div>
@@ -485,7 +417,7 @@
     <div class="help">
       <details>
         <summary class="method-ttl" style="cursor:pointer">📲 上級者向け（任意）：ロック画面・ボタンから記録する</summary>
-        <p style="margin:12px 0 14px">ここは設定が少し手間なので、上の「戻ってきたら記録をうながす」「ホーム画面から開く」だけで十分なら不要です。</p>
+        <p style="margin:12px 0 14px">ここは設定が少し手間なので、上の「ホーム画面から開く」だけで十分なら不要です。</p>
         <div class="url-note" id="urlNote" hidden></div>
 
         <div class="method">
@@ -507,18 +439,6 @@
           </ol>
           <div class="url-box" id="urlBoxB">—</div>
           <button class="copy-btn" id="copyB">このURLをコピー</button>
-        </div>
-
-        <div class="method">
-          <div class="method-ttl">方法C：決済アプリを開いたら「記録する？」（自動化）</div>
-          <ol>
-            <li>ショートカットアプリ → <b>オートメーション</b> → 個人用を作成 →「<b>App</b>」を選ぶ</li>
-            <li>Apple Pay を使う <b>Wallet</b> や、カード会社／PayPay等のアプリを指定し「<b>開かれている</b>」にする（できれば「すぐに実行」）</li>
-            <li>アクションに「<b>URLを開く</b>」を追加し、下のURLを貼る</li>
-          </ol>
-          <div class="url-box" id="urlBoxC">—</div>
-          <button class="copy-btn" id="copyC">このURLをコピー</button>
-          <div class="url-note" style="margin:9px 0 0">※ 実際の決済を検知するわけではなく、決済アプリを開いた“きっかけ”で記録を促す仕組みです。</div>
         </div>
       </details>
     </div>
@@ -854,6 +774,9 @@
     var ox=innerWidth/2,oy=innerHeight*0.28;
     var el=document.getElementById("total");
     if(el){var r=el.getBoundingClientRect();ox=r.left+r.width/2;oy=r.top+r.height/2;}
+    // 画面外に出ないよう可視領域内に収める（キーボード表示中の保険）
+    oy=Math.max(innerHeight*0.12,Math.min(oy,innerHeight*0.5));
+    ox=Math.max(40,Math.min(ox,innerWidth-40));
 
     if(t===1){
       burst(ox,oy,10,"coin",{up:true,colors:COIN_COLORS,r:[6,10],spMin:4,spMax:9,lift:2,g:0.30});
@@ -1048,22 +971,16 @@
     }
     var memo=document.getElementById("memo").value.trim()||(selCat||"");
     var brand=selBrand||"";
-    var prev=monthTotal();
     state.entries.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),amount:amt,memo:memo,brand:brand,ts:Date.now()});
     await save();
     resetViewToNow();
+    // 入力欄をクリアしてキーボードを閉じる → 合計が見える位置へ
+    inp.value="";document.getElementById("memo").value="";clearCat();selBrand=null;renderCardChips();
+    inp.blur();
     render(true);
-    celebrate(amt);
-
-    var total=prev+amt;
-    var head=(brand?brand+"で":"")+(memo?memo+" ":"");
-    if(state.budget>0&&total>state.budget){
-      notify(head+"¥"+fmt(amt)+"。今月の利用額は <b>¥"+fmt(total)+"</b> で、予算を ¥"+fmt(total-state.budget)+" 超えました。",true);
-    }else{
-      notify(head+"¥"+fmt(amt)+"。今月の利用額は <b>¥"+fmt(total)+"</b> です。",false);
-    }
-
-    inp.value="";document.getElementById("memo").value="";clearCat();selBrand=null;renderCardChips();inp.focus();
+    scrollTop();
+    // キーボードが下り切ってから、合計の位置でエフェクトを出す
+    setTimeout(function(){celebrate(amt);},300);
   }
 
   async function removeEntry(id){
@@ -1186,25 +1103,11 @@
   var URL_PLACEHOLDER="https://（あなたの公開URL）/";
   function buildBaseUrl(){ return realBase()||URL_PLACEHOLDER; }
   function buildAddUrl(){ return buildBaseUrl()+"?add="; }
-  function buildAskUrl(){ return buildBaseUrl()+"?ask=1"; }
 
-  // ── 記録プロンプト ──
-  function showRecordPrompt(){
-    resetViewToNow();render(false);
-    var p=document.getElementById("recPrompt");
-    p.hidden=false;
-    // 再アニメーションのためクラスを付け直す
-    p.style.animation="none";void p.offsetWidth;p.style.animation="";
-    scrollTop();
-  }
-  function hideRecordPrompt(){document.getElementById("recPrompt").hidden=true;}
   function openSettings(){
     document.getElementById("budgetInput").value=state.budget>0?fmt(state.budget):"";
     document.getElementById("urlBoxA").textContent=buildBaseUrl();
     document.getElementById("urlBoxB").textContent=buildAddUrl();
-    document.getElementById("urlBoxC").textContent=buildAskUrl();
-    var rt=document.getElementById("remindToggle");
-    rt.setAttribute("aria-checked",state.remindOnReturn?"true":"false");
     var bt=document.getElementById("badgeToggle");
     bt.setAttribute("aria-checked",state.badgeEnabled?"true":"false");
     var note=document.getElementById("urlNote");
@@ -1241,29 +1144,17 @@
   async function handleQuickAdd(){
     var q=new URLSearchParams(location.search);
     var amt=parseAmt(q.get("add")||q.get("amount")||"");
-    var wantAsk=(q.get("ask")==="1");
     if(amt>0){
       var memo=(q.get("memo")||"").trim();
       var brand=(q.get("brand")||"").trim();
       if(brand)addCard(brand); // 未登録なら自動登録
-      var prev=monthTotal();
       state.entries.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),amount:amt,memo:memo,brand:brand,ts:Date.now()});
       await save();
-      var total=prev+amt;
-      var head=(brand?brand+"で":"")+(memo?memo+" ":"");
-      var over=state.budget>0&&total>state.budget;
       // 再読込での二重登録を防ぐためURLを掃除
       history.replaceState(null,"",location.origin+location.pathname);
       resetViewToNow();
       render(false);
-      setTimeout(function(){
-        if(over)notify(head+"¥"+fmt(amt)+"。今月の利用額は <b>¥"+fmt(total)+"</b> で、予算を ¥"+fmt(total-state.budget)+" 超えました。",true);
-        else notify(head+"¥"+fmt(amt)+"。今月の利用額は <b>¥"+fmt(total)+"</b> です。",false);
-      },350);
-    }else if(wantAsk){
-      // 決済アプリを開いた等の“きっかけ”で記録を促す
-      history.replaceState(null,"",location.origin+location.pathname);
-      showRecordPrompt();
+      setTimeout(function(){celebrate(amt);},250);
     }
   }
 
@@ -1274,6 +1165,7 @@
     liveFormat(document.getElementById("budgetInput"));
 
     document.getElementById("addBtn").onclick=addEntry;
+    document.getElementById("amtRecBtn").onclick=addEntry;
     document.getElementById("amount").addEventListener("keydown",function(e){if(e.key==="Enter")addEntry();});
 
     // 月の切り替え
@@ -1315,21 +1207,7 @@
     }
     wireCopy("copyA",buildBaseUrl);
     wireCopy("copyB",buildAddUrl);
-    wireCopy("copyC",buildAskUrl);
 
-    // 記録プロンプト
-    document.getElementById("rpGo").onclick=function(){
-      hideRecordPrompt();resetViewToNow();render(false);
-      var a=document.getElementById("amount");scrollTop();a.focus();
-    };
-    document.getElementById("rpX").onclick=hideRecordPrompt;
-
-    // 「戻ってきたら記録をうながす」トグル
-    document.getElementById("remindToggle").onclick=async function(){
-      state.remindOnReturn=!state.remindOnReturn;
-      this.setAttribute("aria-checked",state.remindOnReturn?"true":"false");
-      await save();
-    };
     // 「アイコンに未記録日数バッジ」トグル（通知許可を1回求める）
     document.getElementById("badgeToggle").onclick=async function(){
       var turningOn=!state.badgeEnabled;
@@ -1341,19 +1219,10 @@
       await save();
       updateAppBadge();
     };
-    // アプリに戻ってきたとき（30分以上あいたら）記録を促す／バッジも更新
+    // アプリに戻ってきたときにバッジを更新
     document.addEventListener("visibilitychange",function(){
       if(document.visibilityState!=="visible")return;
       updateAppBadge();
-      if(!state.remindOnReturn)return;
-      if(!isCurrentView())return;
-      if(document.getElementById("amount").value)return;
-      if(!document.getElementById("recPrompt").hidden)return;
-      var since=Date.now()-(state.lastPromptTs||0);
-      if(since>30*60*1000){
-        state.lastPromptTs=Date.now();save();
-        showRecordPrompt();
-      }
     });
 
     document.getElementById("resetAll").onclick=async function(){
